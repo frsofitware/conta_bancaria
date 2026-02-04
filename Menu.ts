@@ -1,11 +1,11 @@
 import leia from "readline-sync"
+import { colors } from "./src/util/Colors"
 
 export function main() {
-
     let opcao: number
 
     while (true) {
-        console.log(`
+        console.log(colors.bg.black, colors.fg.magentastrong, `
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
 ║       ██████╗  █████╗ ███╗   ██╗ ██████╗  ██████╗         ║
@@ -23,66 +23,83 @@ export function main() {
 ║    [5] ➜ Encerrar Conta                                   ║
 ║                                                           ║
 ║      ---------------------------------------------        ║
-╚═══════════════════════════════════════════════════════════╝`)
-        
-console.log("║ Entre com a opção desejada:                               ║")
-opcao = leia.questionInt(" >> ")
+╚═══════════════════════════════════════════════════════════╝
+`, colors.reset)
 
-if (opcao === 9) {
-    console.log("\n║  Banco do Brasil com Z - O seu futuro começa aqui!        ║")
-    sobre()
-    process.exit(0)
-}
+        console.log(" Entre com a opção desejada:                               ")
+        opcao = leia.questionInt(" >> ")
 
-switch (opcao) {
-    
-    case 1:
-    console.log("\n\nCriar Conta\n\n")
-    break
-    
-    case 2:
-    console.log("\n\nListar todas as Contas\n\n")
-    break
-    
-    case 3:
-    console.log("\n\nConsultar dados da Conta - por número\n\n")
-    break
+        if (opcao === 9) {
+            console.log(colors.fg.cyanstrong, "\n      Banco do Brasil com Z - O seu futuro começa aqui!        ")
+            sobre()
+            console.log(colors.reset, "")
+            process.exit(0)
+        }
 
-    case 4:
-        console.log("\n\nAtualizar dados da conta\n\n")
-        break
-        
-    case 5:
-        console.log("\n\nApagar uma conta\n\n")
-        break
+        switch (opcao) {
+            case 1:
+                console.log(colors.fg.magentastrong, "\n\nCriar Conta\n\n", colors.reset)
+                keyPress()
+                break
+            
+            case 2:
+                console.log(colors.fg.magentastrong, "\n\nListar todas as Contas\n\n", colors.reset)
+                keyPress()
+                break
+            
+            case 3:
+                console.log(colors.fg.magentastrong, "\n\nConsultar dados da Conta - por número\n\n", colors.reset)
+                keyPress()
+                break
 
-    case 6:
-        console.log("\n\nSaque\n\n")
-        break
+            case 4:
+                console.log(colors.fg.magentastrong, "\n\nAtualizar dados da conta\n\n", colors.reset)
+                keyPress()
+                break
+                
+            case 5:
+                console.log(colors.fg.magentastrong, "\n\nApagar uma conta\n\n", colors.reset)
+                keyPress()
+                break
 
-    case 7:
-        console.log("\n\nDepósito\n\n")
-        break
-        
-    case 8:
-        console.log("\n\nTransferência entre Contas\n\n")
-        break
+            case 6:
+                console.log(colors.fg.magentastrong, "\n\nSaque\n\n", colors.reset)
+                keyPress()
+                break
 
-    default:
-        console.log("\nOpção Inválida!\n")
-        break
+            case 7:
+                console.log(colors.fg.magentastrong, "\n\nDepósito\n\n", colors.reset)
+                keyPress()
+                break
+                
+            case 8:
+                console.log(colors.fg.magentastrong, "\n\nTransferência entre Contas\n\n", colors.reset)
+                keyPress()
+                break
+
+            default:
+                console.log(colors.fg.red, "\nOpção Inválida!\n", colors.reset)
+                keyPress()
+                break
         }
     }
 }
 
 export function sobre(): void {
-    console.log("╔═══════════════════════════════════════════════════════════╗")
-    console.log("║      ---------------------------------------------        ║")
-    console.log("║   Projeto desenvolvido por: Sofia                         ║")
-    console.log("║   Generation Brasil - generation@generation.org           ║")
-    console.log("║   github.com/conteudo/Generation                          ║")
-    console.log("║      ---------------------------------------------        ║")
-    console.log("╚═══════════════════════════════════════════════════════════╝")
+    console.log(colors.fg.magentastrong, `
+╔═══════════════════════════════════════════════════════════╗
+║      ---------------------------------------------        ║
+║   Projeto desenvolvido por: Sofia                         ║
+║   Generation Brasil - generation@generation.org           ║
+║   github.com/conteudo/Generation                          ║
+║      ---------------------------------------------        ║
+╚═══════════════════════════════════════════════════════════╝`, colors.reset)
+}
+
+function keyPress(): void {
+    console.log(colors.reset, "")
+    console.log("\nPressione enter para continuar...")
+    leia.prompt()
 }
 
 main()
