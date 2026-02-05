@@ -100,14 +100,14 @@ export class Conta {
 
      // Métodos Auxiliares
 
-     public sacar(valor: number): boolean{
+     public sacar(valor: number): boolean {
 
         if(valor <= 0){
                 console.log(colors.fg.red, "O valor deve ser positivo.", colors.reset);
                 return false;
         }
 
-        if(valor > this._saldo){
+        if(this._saldo < valor){
             console.log(colors.fg.red, "Saldo Insuficiente!", colors.reset);
             return false;
         }
@@ -123,15 +123,12 @@ export class Conta {
             
         else {
              this._saldo += valor;
-        }
-
-        this._saldo -= valor;
-           
+        }        
     }
 
     public visualizar(): void{
 
-        let tipo: string
+        let tipo: string ="";
 
         switch(this._tipo){
 
@@ -152,13 +149,9 @@ export class Conta {
         console.log("             DADOS DA CONTA              ");
         console.log("***************************************\n");
         console.log(`Número da Conta: ${this._numero}`);
-        console.log(`Número da Agência: ${this._agencia}`);
-        console.log(`Nome do Titular: ${this._titular}`);
-        console.log(`Número da Conta: ${tipo}`);
-        console.log(`Saldo da Conta:  R$ ${this._saldo.toFixed(2)}`);
-    }
-
-
-    
+        console.log(`Agência: ${this._agencia}`);
+        console.log(`Titular: ${this._titular}`);
+        console.log(`Tipo da Conta: ${tipo}`);
+        console.log(`Saldo:  R$ ${this._saldo.toFixed(2)}`);
+    }   
 }
-

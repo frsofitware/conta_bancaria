@@ -5,14 +5,15 @@ import { Conta } from "./src/model/Conta"
 export function main() {
     let opcao: number
 
+    // TESTES DE USO
+
     const c1 = new Conta(1, 1234, "Sofia", 1, 1000000.00);
+    
     c1.visualizar();
-
-    console.log("Sacar RS 100.00: ", c1.sacar(100.00));
-    console.log("Sacar RS 200.000.00: ", c1.sacar(200000.00));
-    console.log("Sacar RS 0.0", c1.sacar(0.0) )
-
-
+    c1.sacar(10500);
+    c1.visualizar();
+    c1.depositar(5000);
+    c1.visualizar();
 
     while (true) {
         console.log(colors.bg.black, colors.fg.magentastrong, `
