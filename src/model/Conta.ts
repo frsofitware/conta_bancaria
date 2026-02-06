@@ -1,6 +1,6 @@
 import { colors } from "../util/Colors";
 
-export class Conta {
+export abstract class Conta {
 
     private _numero: number;
     private _agencia: number;
@@ -100,7 +100,7 @@ export class Conta {
 
      // Métodos Auxiliares
 
-     public sacar(valor: number): boolean {
+    public sacar(valor: number): boolean {
 
         if(valor <= 0){
                 console.log(colors.fg.red, "O valor deve ser positivo.", colors.reset);
