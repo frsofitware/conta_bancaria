@@ -47,8 +47,8 @@ export function main() {
         if (opcao === 9) {
             console.log(Colors.fg.cyanstrong, "\n      Banco do Brasil com Z - O seu futuro começa aqui!        ")
             sobre()
-            console.log(Colors.reset, "")
-            process.exit(0)
+            console.log(Colors.reset, "");
+            process.exit(0);
         }
 
         switch (opcao) {
@@ -158,7 +158,7 @@ function deletarContaPorNumero(): void {
     const conta = contas.buscarNoArray(numero);
     
     if(conta !== null){
-        console.log(Colors.fg.whitestrong, `\nTem certeza que deseja deletar a conta número ${numero} [Y/N]?, Colors.reset`)
+        console.log(Colors.fg.whitestrong, `\nTem certeza que deseja deletar a conta número ${numero} [Y/N]?`, Colors.reset)
         const confirma = Input.keyInYNStrict("");
 
         if (confirma)
@@ -192,7 +192,7 @@ function atualizarConta(): void {
       
         console.log(`\nNome atual do Titular ${titular}`);
         console.log("\nDigite o novo nome do Titular:\n(Pressione ENTER para manter o valor atual)");
-        titular = Input.question("", { defaultInput: titular })
+        titular = Input.question("", { defaultInput: titular });
 
         console.log(`\nSaldo Atual: ${formatarMoeda(saldo)}`);
         console.log("\nDigite o valor do novo Saldo:\n(Pressione ENTER para manter o valor atual)");
