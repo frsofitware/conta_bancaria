@@ -1,32 +1,26 @@
 import leia from "readline-sync"
-import { colors } from "./src/util/Colors"
+import { Colors } from "./src/util/Colors"
 import { Conta } from "./src/model/Conta"
 import { ContaCorrente } from "./src/model/ContaCorrente";
 import { ContaPoupanca } from "./src/model/ContaPoupanca";
+import { ContaController } from "./src/controller/ContaController";
+import { Input } from "./src/util/Input";
+import { formatarMoeda } from "./src/util/Currency";
+
+
+const contas = new ContaController();
+
+const tipoContas = ['Conta Corrente', 'Conta Poupança'];
+
 
 export function main() {
+   
     let opcao: number
 
-    // TESTES DE USO
-
-   // Objeto da Classe ContaCorrente (Teste)
-    const contacorrente: ContaCorrente = new ContaCorrente(2, 123, "Mariana", 1, 15000, 1000);
-    contacorrente.visualizar();
-    contacorrente.sacar(2000);
-    contacorrente.visualizar();
-    contacorrente.depositar(1000);
-    contacorrente.visualizar();
-
-    // Objeto da Classe ContaPoupanca (teste)
-    const contapoupanca: ContaPoupanca = new ContaPoupanca(3, 123, "Victor", 2, 1000, 10);
-    contapoupanca.visualizar();
-    contapoupanca.sacar(200);
-    contapoupanca.visualizar();
-    contapoupanca.depositar(1000);
-    contapoupanca.visualizar();
+    criarContasTeste ();
 
     while (true) {
-        console.log(colors.bg.black, colors.fg.magentastrong, `
+        console.log(Colors.bg.black, Colors.fg.magentastrong, `
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
 ║       ██████╗  █████╗ ███╗   ██╗ ██████╗  ██████╗         ║
@@ -45,82 +39,225 @@ export function main() {
 ║                                                           ║
 ║      ---------------------------------------------        ║
 ╚═══════════════════════════════════════════════════════════╝
-`, colors.reset)
+`, Colors.reset)
 
         console.log(" Entre com a opção desejada:                               ")
         opcao = leia.questionInt(" >> ")
 
         if (opcao === 9) {
-            console.log(colors.fg.cyanstrong, "\n      Banco do Brasil com Z - O seu futuro começa aqui!        ")
+            console.log(Colors.fg.cyanstrong, "\n      Banco do Brasil com Z - O seu futuro começa aqui!        ")
             sobre()
-            console.log(colors.reset, "")
+            console.log(Colors.reset, "")
             process.exit(0)
         }
 
         switch (opcao) {
             case 1:
-                console.log(colors.fg.magentastrong, "\n\nCriar Conta\n\n", colors.reset)
+                console.log(Colors.fg.magentastrong, "\n\nCriar Conta\n\n", Colors.reset)
+                  criarConta();
                 keyPress()
                 break
             
             case 2:
-                console.log(colors.fg.magentastrong, "\n\nListar todas as Contas\n\n", colors.reset)
+                console.log(Colors.fg.magentastrong, "\n\nListar todas as Contas\n\n", Colors.reset)
+                listarTodasContas();
                 keyPress()
                 break
             
             case 3:
-                console.log(colors.fg.magentastrong, "\n\nConsultar dados da Conta - por número\n\n", colors.reset)
+                console.log(Colors.fg.magentastrong, "\n\nConsultar dados da Conta - por número\n\n", Colors.reset)
+                buscarContaPorNumero();
                 keyPress()
                 break
 
             case 4:
-                console.log(colors.fg.magentastrong, "\n\nAtualizar dados da conta\n\n", colors.reset)
-                keyPress()
+                console.log(Colors.fg.magentastrong, "\n\nAtualizar dados da conta\n\n", Colors.reset)
+                atualizarConta();
+                keyPress();
                 break
                 
             case 5:
-                console.log(colors.fg.magentastrong, "\n\nApagar uma conta\n\n", colors.reset)
+                console.log(Colors.fg.magentastrong, "\n\nApagar uma conta\n\n", Colors.reset)
+                deletarContaPorNumero();
                 keyPress()
                 break
 
             case 6:
-                console.log(colors.fg.magentastrong, "\n\nSaque\n\n", colors.reset)
+                console.log(Colors.fg.magentastrong, "\n\nSaque\n\n", Colors.reset)
                 keyPress()
                 break
 
             case 7:
-                console.log(colors.fg.magentastrong, "\n\nDepósito\n\n", colors.reset)
+                console.log(Colors.fg.magentastrong, "\n\nDepósito\n\n", Colors.reset)
                 keyPress()
                 break
                 
             case 8:
-                console.log(colors.fg.magentastrong, "\n\nTransferência entre Contas\n\n", colors.reset)
+                console.log(Colors.fg.magentastrong, "\n\nTransferência entre Contas\n\n", Colors.reset)
                 keyPress()
                 break
 
             default:
-                console.log(colors.fg.red, "\nOpção Inválida!\n", colors.reset)
+                console.log(Colors.fg.red, "\nOpção Inválida!\n", Colors.reset)
                 keyPress()
                 break
         }
     }
 }
 
+// Opção 1: Criar uma nova conta.
+
+function criarConta(){
+    console.log("Digite o número da agência: ");
+    const agencia = Input.questionInt("");
+    
+    console.log("Digite o nome do titular: ");
+    const titular = Input.question("");
+
+    console.log("Selecione o tipo da conta: ");
+    const tipo = Input.keyInSelect(tipoContas, "", {cancel:false}) + 1;
+
+    console.log("Digite o saldo da conta: ");
+    const saldo = Input.questionFloat("");
+
+
+    switch(tipo){
+        case 1:
+            console.log("Digite o limite da conta: ");
+            const limite = Input.questionFloat("");
+            contas.cadastrar(new ContaCorrente(contas.gerarNumero(), agencia, titular, tipo, saldo, limite));
+
+        break
+
+        case 2:
+            console.log("Digite o dia do aniversário da conta: ");
+            const aniversario = Input.questionInt("");
+            contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), agencia, titular, tipo, saldo, aniversario));
+
+        break
+    }
+}
+
+function listarTodasContas(): void {
+    contas.listarTodas();
+}
+
+function buscarContaPorNumero(): void {
+
+    console.log("Digite o número da conta: ");
+    const numero = Input.questionInt("");
+
+    contas.procurarPorNumero(numero);
+}
+
+function deletarContaPorNumero(): void {
+
+    console.log("Digite o número da conta: ");
+    const numero = Input.questionInt("");
+    
+    const conta = contas.buscarNoArray(numero);
+    
+    if(conta !== null){
+        console.log(Colors.fg.whitestrong, `\nTem certeza que deseja deletar a conta número ${numero} [Y/N]?, Colors.reset`)
+        const confirma = Input.keyInYNStrict("");
+
+        if (confirma)
+            contas.deletar(numero);
+
+        else
+            console.log(Colors.fg.red, "\nOperação cancelada!", Colors.reset);
+
+    } else {
+        console.log(Colors.fg.red, `A conta número ${numero} não foi encontrada!`, Colors.reset)
+    }
+}
+
+function atualizarConta(): void {
+    
+    console.log("Digite o número da conta: ");
+    const numero = Input.questionInt("");
+
+    const conta = contas.buscarNoArray(numero);
+
+    if(conta !== null){
+
+        let agencia: number = conta.agencia;
+        let titular: string = conta.titular;
+        const tipo: number = conta.tipo;
+        let saldo: number = conta.saldo;
+
+        console.log(`\nAgencia Atual: ${agencia}`);
+        console.log("\nDigite o número da nova Agência:\n(Pressione ENTER para manter o valor atual)");
+        agencia = Input.questionInt("", { defaultInput: agencia });
+      
+        console.log(`\nNome atual do Titular ${titular}`);
+        console.log("\nDigite o novo nome do Titular:\n(Pressione ENTER para manter o valor atual)");
+        titular = Input.question("", { defaultInput: titular })
+
+        console.log(`\nSaldo Atual: ${formatarMoeda(saldo)}`);
+        console.log("\nDigite o valor do novo Saldo:\n(Pressione ENTER para manter o valor atual)");
+        saldo = Input.questionFloat("", { defaultInput: saldo });
+
+        switch(tipo){
+        
+            case 1:{
+            let limite: number = (conta as ContaCorrente).limite;
+
+            console.log(`\nLimite Atual: ${limite}`);
+            console.log(`Digite o valor do Novo Limite:\n(Pressione ENTER para manter o valor)`);
+            limite = Input.questionFloat("", { defaultInput: limite })
+
+            contas.atualizar(new ContaCorrente(numero, agencia, titular, tipo, saldo, limite));
+
+        break
+        }
+
+        case 2:
+            let aniversario: number = (conta as ContaPoupanca).aniversario;
+
+            console.log(`\nAgencia Atual: ${aniversario}`);
+            console.log(`Digite o novo valor do Aniversário:\n(Pressione ENTER para manter o valor)`)
+            aniversario = Input.questionInt("", { defaultInput: aniversario });
+
+            contas.atualizar(new ContaPoupanca(numero, agencia, titular, tipo, saldo, aniversario));
+            
+
+        break
+    }
+
+
+    } else {
+        console.log(Colors.fg.red, `A conta número ${numero} não foi encontrada.`,  Colors.reset)
+    }
+
+}
+
 export function sobre(): void {
-    console.log(colors.fg.magentastrong, `
+    console.log(Colors.fg.magentastrong, `
 ╔═══════════════════════════════════════════════════════════╗
 ║      ---------------------------------------------        ║
 ║   Projeto desenvolvido por: Sofia                         ║
 ║   Generation Brasil - generation@generation.org           ║
 ║   github.com/conteudo/Generation                          ║
 ║      ---------------------------------------------        ║
-╚═══════════════════════════════════════════════════════════╝`, colors.reset)
+╚═══════════════════════════════════════════════════════════╝`, Colors.reset)
 }
 
 function keyPress(): void {
-    console.log(colors.reset, "")
+    console.log(Colors.reset, "")
     console.log("\nPressione enter para continuar...")
     leia.prompt()
 }
 
+function criarContasTeste(): void{
+   
+    // Instâncias da Classe ContaCorrente
+    contas.cadastrar(new ContaCorrente(contas.gerarNumero(), 1234, 'Amanda Magro', 1, 1000000.00, 100000.00));
+    contas.cadastrar(new ContaCorrente(contas.gerarNumero(), 4578, 'João da Silva', 1,  1000.00, 100.00));
+ 
+    // Instâncias da Classe ContaPoupança
+    contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), 5789, "Geana Almeida", 2, 10000, 10));
+    contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), 5698, "Jean Lima", 2, 15000, 15));
+ 
+}
 main()

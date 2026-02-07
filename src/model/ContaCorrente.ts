@@ -1,4 +1,4 @@
-import { colors } from "../util/Colors"
+import { Colors } from "../util/Colors"
 import { Conta } from "./Conta"
 
 export class ContaCorrente extends Conta{
@@ -42,16 +42,16 @@ export class ContaCorrente extends Conta{
     public sacar(valor: number): boolean {
     
         if(valor <= 0){
-            console.log(colors.fg.red, 
+            console.log(Colors.fg.red, 
                 "O valor deve ser positivo.", 
-                colors.reset);
+                Colors.reset);
         return false;
         }
     
         if(valor > (this.saldo + this._limite)){
-            console.log(colors.fg.red, 
+            console.log(Colors.fg.red, 
                 "Saldo Insuficiente!", 
-                colors.reset
+                Colors.reset
             );
             
         return false;
